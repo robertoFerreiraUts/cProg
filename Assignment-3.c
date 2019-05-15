@@ -4,10 +4,8 @@
  *	Names:
  *	Jackie Leong	(Team Leader)
  *	Alan Kocharians
- *	Nick Lacono
+ *	Nick Iacono
  *	Roberto Ferreira
- *	lol
-	ALRIGHT GEEZER
  *	Date: 08/05/2019
  *	
 ********************************************************************************/
@@ -34,13 +32,13 @@
  *
 ********************************************************************************/
 void login (void);
-void ChangePassword (void);
-void RESET (void);
-void Main_Menu (void);
-void Start_Menu (void);
-void Encrypt (void);
-void Decrypt (void);
-void Search (void);
+void changePassword (void);
+void reset (void);
+void main_menu (void);
+void start_menu (void);
+void encrypt (void);
+void decrypt (void);
+void search (void);
 
 /********************************************************************************
  *	Structs
@@ -76,7 +74,7 @@ int login (void)
  *
 ********************************************************************************/
 
-int ChangePassword (void)
+int changePassword (void)
 {
 	/* CODE */
 }
@@ -87,7 +85,7 @@ int ChangePassword (void)
  *
 ********************************************************************************/
 
-int RESET (void)
+int reset (void)
 {
 	/* CODE */
 }
@@ -98,7 +96,7 @@ int RESET (void)
  *
 ********************************************************************************/
 
-int Start_Menu (void)
+int start_menu (void)
 {
 	/* CODE */
 }
@@ -109,7 +107,7 @@ int Start_Menu (void)
  *
 ********************************************************************************/
 
-int Main_Menu (void)
+int main_menu (void)
 {
 	/* CODE */
 }
@@ -120,7 +118,7 @@ int Main_Menu (void)
  *
 ********************************************************************************/
 
-int Encrypt (void)
+int encrypt (void)
 {
 	/* CODE */
 }
@@ -131,7 +129,7 @@ int Encrypt (void)
  *
 ********************************************************************************/
 
-int Decrypt (void)
+int decrypt (void)
 {
 	/* CODE */
 }
@@ -142,7 +140,7 @@ int Decrypt (void)
  *
 ********************************************************************************/
 
-int Search (void)
+int search (void)
 {
 	/* CODE */
 }
