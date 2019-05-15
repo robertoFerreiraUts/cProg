@@ -25,20 +25,22 @@
  *
  *
 ********************************************************************************/
-#define MAX
+
 /********************************************************************************
  *	Function Prototypes
  *
  *
 ********************************************************************************/
-void login (void);
-void changePassword (void);
-void reset (void);
-void main_menu (void);
-void start_menu (void);
-void encrypt (void);
-void decrypt (void);
-void search (void);
+void pre_menu(void);
+user_t login(void);
+void create_user(void);
+void change_password(void);
+void reset(void);
+void main_menu(void);
+void start_menu(void);
+void encrypt(char* filename);
+void decrypt(char* filename);
+void search(char* filename);
 
 /********************************************************************************
  *	Structs
