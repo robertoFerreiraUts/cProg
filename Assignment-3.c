@@ -32,7 +32,7 @@
  *
  *
 ********************************************************************************/
-void PasswordEntry (void);
+void login (void);
 void ChangePassword (void);
 void RESET (void);
 void Main_Menu (void);
@@ -64,7 +64,7 @@ int main (void)
  *
 ********************************************************************************/
 
-int PasswordEntry (void)
+int login (void)
 {
 	/* CODE */
 }
