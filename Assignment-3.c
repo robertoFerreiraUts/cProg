@@ -37,7 +37,6 @@ void create_user(void);
 void change_password(void);
 void reset(void);
 void main_menu(void);
-void start_menu(void);
 void encrypt(char* filename);
 void decrypt(char* filename);
 void search(char* filename);
