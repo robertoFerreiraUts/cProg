@@ -27,6 +27,20 @@
 ********************************************************************************/
 
 /********************************************************************************
+ *	Structs
+ *
+ *
+********************************************************************************/
+struct user 
+{
+	char* name;
+	char* password;
+	int public_key;
+	int private_key;
+};
+typedef struct user user_t;
+
+/********************************************************************************
  *	Function Prototypes
  *
  *
@@ -40,19 +54,9 @@ void main_menu(void);
 void encrypt(char* filename);
 void decrypt(char* filename);
 void search(char* filename);
+void main_menu_select(char* filename);
 
-/********************************************************************************
- *	Structs
- *
- *
-********************************************************************************/
-struct User 
-{
-	char* name;
-	char* password;
-	int public_key;
-	int private_key;
-}
+
 /********************************************************************************
  *	MAIN
  *
@@ -61,7 +65,12 @@ struct User
 
 int main (void)
 {
+	char* filename;
+	filename = "hello";
 	/* CODE */
+	main_menu_select(filename);
+	
+	return 0;
 }
 
 /********************************************************************************
@@ -70,9 +79,11 @@ int main (void)
  *
 ********************************************************************************/
 
-int login (void)
+user_t login (void)
 {
+	user_t user;
 	/* CODE */
+	return user;
 }
 
 /********************************************************************************
@@ -81,9 +92,9 @@ int login (void)
  *
 ********************************************************************************/
 
-int changePassword (void)
+void changePassword (void)
 {
-	/* CODE */
+	/* CODE */return;
 }
 
 /********************************************************************************
@@ -92,9 +103,9 @@ int changePassword (void)
  *
 ********************************************************************************/
 
-int reset (void)
+void reset (void)
 {
-	/* CODE */
+	/* CODE */return;
 }
 
 /********************************************************************************
@@ -103,9 +114,9 @@ int reset (void)
  *
 ********************************************************************************/
 
-int start_menu (void)
+void start_menu (void)
 {
-	/* CODE */
+	/* CODE */return;
 }
 
 /********************************************************************************
@@ -114,9 +125,14 @@ int start_menu (void)
  *
 ********************************************************************************/
 
-int main_menu (void)
+void main_menu (void)
 {
-	/* CODE */
+	printf("\n"
+	"1. Encrypt File\n"
+	"2. Decrypt File\n"
+	"3. Search File\n"
+	"4. Exit the program\n"
+	"Enter choice (Number between 1-4)>\n");
 }
 
 /********************************************************************************
@@ -125,9 +141,34 @@ int main_menu (void)
  *
 ********************************************************************************/
 
-int encrypt (void)
+void main_menu_select (char* filename)
 {
-	/* CODE */
+	int i = 0;
+	while (i != 4)
+	{
+		main_menu();
+		scanf("%d", &i);
+		
+		switch (i){
+			
+		case 1: encrypt(filename);
+				break;
+		case 2: decrypt(filename);
+				break; 
+		case 3: search(filename);
+				break;
+		case 4: exit(0);
+				break;
+		default: 
+			printf("Invalid choice\n");
+		}
+	}
+
+}
+
+void encrypt (char* filename)
+{
+	/* CODE */return;
 }
 
 /********************************************************************************
@@ -136,9 +177,9 @@ int encrypt (void)
  *
 ********************************************************************************/
 
-int decrypt (void)
+void decrypt (char* filename)
 {
-	/* CODE */
+	/* CODE */return;
 }
 
 /********************************************************************************
@@ -147,7 +188,7 @@ int decrypt (void)
  *
 ********************************************************************************/
 
-int search (void)
+void search (char* filename)
 {
-	/* CODE */
+	/* CODE */return;
 }
