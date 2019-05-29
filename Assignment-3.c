@@ -25,6 +25,14 @@
  *
  *
 ********************************************************************************/
+#define MAX_QUES_LEN 100
+#define MAX_ANS_LEN 50
+#define MIN_USERNAME_LEN 5
+#define MIN_PASS_LEN 8
+#define MAX_ENTRY 500
+#define MAX_USERINFO_LEN 25
+#define MAX_REC_QUES 3
+#define INVALID_USERNAME_CHAR "`~!@#$%^&*()_-+=[]\\{}|;\':\",./<>? "
 
 /********************************************************************************
  *	Structs
@@ -47,10 +55,15 @@ typedef struct user user_t;
 ********************************************************************************/
 void pre_menu(void);
 user_t login(void);
-void create_user(void);
+user_t create_user(void);
 void change_password(void);
 void reset(void);
 void main_menu(void);
+<<<<<<< HEAD
+=======
+int ran_prime (char* given);
+char* get_message(char* filename);
+>>>>>>> fc44aa399c58ff69f63cf4ce6cbbf1ce65462678
 void encrypt(char* filename);
 void decrypt(char* filename);
 void search(char* filename);
@@ -83,7 +96,7 @@ int main (void)
 
 user_t login (void)
 {
-	user_t user;
+	user_t user = {0, 0, 0, 0};
 	/* CODE */
 	return user;
 }
@@ -252,4 +265,232 @@ void decrypt (char* filename)
 void search (char* filename)
 {
 	return;
+}
+
+
+/********************************************************************************
+ *	createuser
+ *
+ *
+********************************************************************************/
+
+user_t create_user (void)
+{
+	while ((getchar()) != '\n');
+	char TempName[MAX_ENTRY], TempPass[MAX_ENTRY];
+	char Ques[MAX_REC_QUES + 1][MAX_ENTRY], Ans[MAX_REC_QUES + 1][MAX_ENTRY];
+	int i = 0, l = 0, a = 0, b = 0;
+	FILE * Userfile;
+
+	/* Entering "*" canceles user creation */
+	printf("Enter * at any time to cancel.\n");
+
+	/* Username entry */
+	for (i = 0; i < 1; i++)
+	{
+		printf("Enter a username that is between 5 to 25 characters long using only letters, underscores and/or numbers.\n");
+		fgets(TempName, MAX_ENTRY, stdin);
+
+		/* Checking for cancel */
+		if (strcmp(TempName, "*\n") == 0)
+		{
+			printf("Cancelling.\n");
+			main();
+		}
+
+		/* Checking for previous used usernames */
+		Userfile = fopen(TempName, "r");
+		if (Userfile != NULL)
+		{
+			printf("Your username is the same as another user, please try a different username or add numbers e.g. Username1\n");
+			i--;
+		}
+
+		/* Username valid?, + 1 to account for newline character appended by fgets */
+		if ((strlen(TempName)) > MAX_USERINFO_LEN + 1 || (strlen(TempName)) < MIN_USERNAME_LEN + 1 || (strpbrk(TempName, INVALID_USERNAME_CHAR)) > 0)
+		{
+			printf("Your username is too long, too short or contains invalid characters, please try using a different username.\n");
+			i--;
+		}
+	}
+
+	/* Password Entry */
+	for (i = 0; i < 1; i++)
+	{
+		printf("Enter a password that is between 8 to 25 characters long.\n");
+		fgets(TempPass, MAX_ENTRY, stdin);
+
+		/* Checking for cancel */
+		if (strcmp(TempPass, "*\n") == 0)
+		{
+			printf("Cancelling.\n");
+			main();
+		}
+
+		/* Password Valid? */
+		if ((strlen(TempPass)) > MAX_USERINFO_LEN + 1 || (strlen(TempPass)) < MIN_PASS_LEN + 1)
+		{
+			printf("Your password is too short or too long, please try a different password.\n");
+			i--;
+		}
+	}
+	
+	/* Recovery questions */
+	for (i = 0; i < 1; i++)
+	{
+		printf("Add recovery questions to your account.\n");
+
+		for (l = 1; l < MAX_REC_QUES + 1; l++)
+		{
+			for (i = 0; i < 1; i++)
+			{
+				/* Entering their question */
+				printf("Enter recovery question %d (Maximum 100 characters)\n", l);
+				fgets(Ques[l], MAX_ENTRY, stdin);
+
+				/* Checking for cancel */
+				if ((strcmp(Ques[l], "*\n")) == 0)
+				{
+					printf("Cancelling.\n");
+					main();
+				}
+
+				/* Valid input? */
+				else if (strlen(Ques[l]) > MAX_QUES_LEN + 1 || strlen(Ques[l]) < 1)
+				{
+					printf("Invalid input, too long or no input.\n");
+					i--;
+				}
+			}
+
+			for (i = 0; i < 1; i++)
+			{
+				/* Entering their answer */
+				printf("Enter the answer to: %s", Ques[l]);
+				fgets(Ans[l], MAX_ENTRY, stdin);
+
+				/* Checking for cancel */
+				if ( (strcmp(Ans[l], "*\n")) == 0)
+				{
+					printf("Cancelling.\n");
+					main();
+				}
+
+				/* Valid input? */
+				else if (strlen(Ans[l]) > MAX_ANS_LEN + 1 || strlen(Ans[l]) < 1)
+				{
+					printf("Invalid input, too long or no input.\n");
+					i--;
+				}
+			}
+		}
+	}
+
+	printf("Creating user, please wait...\n");
+
+	/* Getting random prime numbers */
+
+	a = ran_prime(TempName);
+	b = ran_prime(TempPass);
+
+	if (a == 0 || b == 0)
+	{
+		printf("Something went wrong, cancelling."
+			   "DEBUG:"
+			   "a = %d"
+			   "b = %d", a, b);
+		main();
+	}
+
+	/* Saving Username & Password */
+	
+	Userfile = fopen(TempName, "w");
+
+	/* File creation successful? */
+    if (Userfile == NULL) {
+        printf("Something went wrong, you may not have permission to create files, cancelling.\n");
+        main();
+    }
+
+    /* Saving username, password */
+	fprintf(Userfile, "Username: %s\nPassword: %s\n", TempName, TempPass);
+
+	/* Saving security questions */
+	for (i = 1; i < MAX_REC_QUES + 1; i++)
+	{
+		fprintf(Userfile, "Q%d: %sA%d: %s\n", i, Ques[i], i, Ans[i]);
+	}
+
+	/* Holding Keys ***TEMPORARY*** */
+
+	fprintf(Userfile, "a = %i\nb = %i\n", a, b);
+
+	/* Closing file */
+	fclose(Userfile);
+
+	/* Success (if fail, returned to manu earlier) */
+	printf("\nSuccess, Welcome %s", TempName);
+
+	/* Returning struct */
+
+	user_t user = {TempName, TempPass, a, b};
+
+	return user;
+}
+
+/********************************************************************************
+ *	ran_prime
+ *
+ *
+********************************************************************************/
+
+int ran_prime (char* given)
+{
+	int i = 0, ran_num = 0, primed = 0, l = 0, prime = 0;
+	long seed = 0;
+	char entry[MAX_ENTRY];
+
+	strcpy(entry, given);
+
+	/* To get consistant primes (will still be different as usernames cannot be the same)
+	   change MAX_ENTRY to strlen(entry) */
+	for (i = 0; i < MAX_ENTRY; i++)
+	{
+		int Temp = entry[i];
+		seed = fabs(seed + Temp);
+	}
+
+	srand(seed);
+
+	/* printf("Seed: %ld\n", seed); */
+
+	for (i = 0; i < 1; i++)
+	{
+		ran_num = rand();
+
+		for (l = 2; l < ran_num/2; l++)
+		{
+			if (ran_num%l == 0)
+			{
+				primed = 1;
+				break;
+			}
+		}
+
+		if (primed == 0)
+		{
+			prime = ran_num;
+			break;
+		}
+		else
+		{
+			i--;
+		}
+
+		primed = 0;
+	}
+
+	/* printf("The prime: %d\n", prime); */
+
+	return prime;
 }
