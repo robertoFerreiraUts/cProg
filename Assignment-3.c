@@ -68,7 +68,7 @@ void search(char* filename);
 void main_menu_select(char* filename);
 int gcd(int a, int b);
 
-FILE *fp1, *fp2;
+
 char ch;
 /********************************************************************************
  *	MAIN
@@ -80,7 +80,7 @@ int main (void)
 {
 	char* filename;
 	filename = "hello";
-	encrypt(filename);
+	
 	/* CODE */
 	main_menu_select(filename);
 
@@ -95,7 +95,7 @@ int main (void)
 
 user_t login (void)
 {
-	user_t user = {0, 0, 0, 0};
+	user_t user;
 	/* CODE */
 	return user;
 }
@@ -184,6 +184,8 @@ void main_menu_select (char* filename)
 
 void encrypt(char* filename)
 {
+
+	FILE *fp1, *fp2;
 	printf("\n");
 	fp1 = fopen(filename,"r");
 	if(fp1 == NULL)
@@ -224,6 +226,8 @@ void encrypt(char* filename)
 
 void decrypt (char* filename)
 {
+
+	FILE *fp1, *fp2;
 	printf("\n");
 	fp1 = fopen("encrypted.txt","r");
 	if(fp1 == NULL)
@@ -436,6 +440,7 @@ user_t create_user (void)
 
 	return user;
 }
+
 
 /********************************************************************************
  *	ran_prime
