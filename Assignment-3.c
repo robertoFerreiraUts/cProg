@@ -59,11 +59,8 @@ user_t create_user(void);
 void change_password(void);
 void reset(void);
 void main_menu(void);
-<<<<<<< HEAD
-=======
 int ran_prime (char* given);
 char* get_message(char* filename);
->>>>>>> fc44aa399c58ff69f63cf4ce6cbbf1ce65462678
 void encrypt(char* filename);
 void decrypt(char* filename);
 void search(char* filename);
