@@ -62,11 +62,9 @@ void main_menu(void);
 int ran_prime (char* given);
 char* get_message(char* filename);
 void encrypt(char* filename);
-void save_encryption(char* filename, char* message);
 void decrypt(char* filename);
 void search(char* filename);
 void main_menu_select(char* filename);
-int gcd(int a, int b);
 
 
 char ch;
