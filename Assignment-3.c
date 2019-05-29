@@ -2,7 +2,7 @@
  *	48430 Fundamentals of C Programming - Assignment 3 (Group Project)
  *	File Encryption
  *	Names:
- *	Jackie Leong	(Team Leader)
+ *	Jackie Leong	(Team Leader)(neehowdy)(LOOKHEREIFITCHANGED)
  *	Alan Kocharians
  *	Nick Iacono
  *	Roberto Ferreira
@@ -65,7 +65,7 @@ void encrypt(char* filename);
 void decrypt(char* filename);
 void search(char* filename);
 void main_menu_select(char* filename);
-
+int Questions_to_verify(char *Question,char *Correct_Answer,int counter,char *input);
 
 char ch;
 /********************************************************************************
@@ -86,7 +86,7 @@ int main (void)
 }
 
 /********************************************************************************
- *	PasswordEntry
+ *	Login (Jackie)
  *
  *
 ********************************************************************************/
@@ -94,8 +94,77 @@ int main (void)
 user_t login (void)
 {
 	user_t user;
-	/* CODE */
-	return user;
+	user.name = username;
+	user.password=password;
+	user.public_key = a;                    /*a and b are interchangeable values depending on which is public*/
+	user.private_key= b;                    /*and whichever is private*/
+	char file_name[MAX_ENTRY];              /*file_name and username are the same however to access the file*/
+    char username[MAX_ENTRY];               /*and that values inside, i have used two variables*/
+    char entered_password[MAX_ENTRY];		/*user input password*/
+    char password[MAX_ENTRY];				/*genuine password for the acc*/
+	int i=0;                                /*Counter for loop*/
+    while (i!=1)
+    {
+        fflush(stdin);                      /*Clears the stdin to remove overflow*/
+        printf("Enter your username or enter * to exit the program.\n");
+	    fgets(file_name,MAX_ENTRY,stdin);
+	    FILE*fp=NULL;
+        fp = fopen(file_name,"r");
+        if (strcmp(file_name,"*\n")==0)
+        {
+            printf("Byebye\n");
+            return 0;
+        }
+                                                                    /*This line authetnticates whether the entered username is valid*/
+                                                                    /*it verifies this by checking the length, invalid chars, etc.  */
+        if ((fp == NULL && strcmp(file_name,"*\n")!=0) || (strlen(file_name)) > MAX_USERINFO_LEN + 1 || (strlen(file_name)) < MIN_USERNAME_LEN + 1 || (strpbrk(file_name, INVALID_USERNAME_CHAR)) > 0 )
+        {
+            printf("Username is invalid\n");
+            i=0;
+        }
+	    else
+	    {
+	        fscanf(fp,"Username: %s\n\nPassword: %s\n",username,password);
+            fclose(fp);
+	        i =1;
+	    }
+	}
+    
+    int count=0;                                                    /*Counter for the while loop below*/    
+    
+    while (count !=10)
+    {
+        fflush(stdin);                                              /*Used to clear the stdin so that overflow does not occur*/
+    	printf("Enter your password or enter * to exit the program\n");
+        fgets(entered_password,MAX_ENTRY,stdin);
+        char *pos;                                                  /*pos used to remove the /n character and replace it with*/
+        if ((pos=strchr(entered_password,'\n'))!=NULL)              /*the \0 character so that strcmp will work successfully */
+        *pos ='\0';
+        else 
+        {
+            printf("Password is too long\n");
+            count=1;
+        }       
+        if (strcmp (entered_password,password)==0)                  /*If password is correct, this condition will occur*/
+        {	
+        	printf("Correct, Welcome back\n");
+        	count = 10;
+       	}
+        else if (strcmp(entered_password,"*")==0)                   /*Exit the password section. Essentially a quit key*/
+        {
+        	printf("bye");
+        	return 0;
+        }
+        else 
+        {
+        	printf("Incorrect password, try again\n");
+        	count = 1;
+        }
+        
+    }
+    printf("Congratulations, you've entered the correct password!");    /*This line is to ensure login is successful (Optional) */
+   	                                                                    /*From this line onwards, it will jump to the main menu.*/
+	return main();
 }
 
 /********************************************************************************
@@ -106,7 +175,86 @@ user_t login (void)
 
 void changePassword (void)
 {
-	/* CODE */return;
+	char file_name[MAX_ENTRY];              /*file_name is the file where the user's personal details are stored*/
+    char user_ans[MAX_ENTRY];               /*user_ans refers to the user's input/answers throughout the function*/
+    char file_details_1[MAX_ANS_LEN];       /*file_details_x where x is a number from 1-3 is the answers to the questions*/
+    char file_details_2[MAX_ANS_LEN];    
+    char file_details_3[MAX_ANS_LEN];
+    char file_quest_1[MAX_QUES_LEN];        /*file_quest_x where x is a number from 1-3 is the questions made by the user*/
+    char file_quest_2[MAX_QUES_LEN];
+    char file_quest_3[MAX_QUES_LEN];
+    char a[1000];                            /*These represent the private and public keys a and b*/
+    char b[1000];
+    char username[MAX_ENTRY];               /*username is the same string as file_name however is used as a string rather*/
+                                            /*than as a file*/
+    char password[MAX_ENTRY];               /*password associated with the file.*/
+    int count = 0;  
+
+    while (count!=1)
+    {
+        fflush(stdin);                      /*Clears the stdin to remove overflow*/
+        printf("Enter your username or enter * to exit the program.\n");
+	    fgets(file_name,MAX_ENTRY,stdin);
+	    FILE*fp=NULL;
+        fp = fopen(file_name,"r");
+        if (strcmp(file_name,"*\n")==0)
+        {
+            printf("Bye\n");
+            return 0;
+        }
+/*This line authetnticates whether the entered username is valid it verifies this by checking the length, invalid chars, etc.*/
+        if ((fp == NULL && strcmp(file_name,"*\n")!=0) || (strlen(file_name)) > MAX_USERINFO_LEN + 1 || (strlen(file_name)) < MIN_USERNAME_LEN + 1 || (strpbrk(file_name, INVALID_USERNAME_CHAR)) > 0 )
+        {
+            printf("Username is invalid\n");
+            count=0;
+        }
+        /*If user_ans is correct, this condition occurs where data from the user's file is accessed.*/
+        else
+        {
+            fscanf(fp,"Username: %s\n\nPassword: %s\n\nQ1: %s\nA1: %s\n\nQ2: %s\nA2: %s\n\nQ3:%s\nA3: %s\n\na: %s\nb: %s",username, password, file_quest_1, file_details_1, file_quest_2, file_details_2, file_quest_3, file_details_3, a, b);
+            fclose(fp);
+            count =1;
+        }
+    }
+    
+    Questions_to_verify(file_quest_1,file_details_1,count,user_ans);
+    Questions_to_verify(file_quest_2,file_details_2,count,user_ans);
+    Questions_to_verify(file_quest_3,file_details_3,count,user_ans);
+    count =0;
+    /*If all questions are answered succssfully, then user can create a new password with function below.*/
+    while (count!=1)
+    {
+        printf("Enter a new password that is between 8 to 25 characters long, enter * to cancel\n");                             /*Need to implement Alan's conditions for making the pw*/
+        fgets(user_ans,MAX_ENTRY,stdin);
+        if (strcmp(user_ans,"*\n")==0)
+        {
+            printf("Bye\n");
+            return 0;
+        }
+        if ((strlen(user_ans)) > MAX_USERINFO_LEN + 1 || (strlen(user_ans)) < MIN_PASS_LEN + 1)
+		{
+			printf("Your password is too short or too long, please try a different password.\n");
+			count = 0;
+        }
+        else
+        {
+            strcpy(password,user_ans);
+            count=1;
+        }
+    }
+    
+    FILE*fpp=NULL;                                              /*fpp pointer is to point the user's file and reset the password*/
+    fpp = fopen(file_name,"w");
+    if (fpp == NULL)                                            /*if fpp does not exist, which it wont unless the files are */
+                                                                /*externally edited outside the program*/
+    {
+        printf("file error\n");
+        return 1;
+    }
+    
+    fprintf(fpp,"Username: %s\n\nPassword: %s\n\nQ1: %s\nA1: %s\n\nQ2: %s\nA2: %s\n\nQ3: %s\nA3: %s\n\na: %s\nb:%s",username,password,file_quest_1,file_details_1,file_quest_2,file_details_2,file_quest_3,file_details_3,a,b);
+    fclose(fpp);
+    return 0;
 }
 
 /********************************************************************************
@@ -495,4 +643,48 @@ int ran_prime (char* given)
 	/* printf("The prime: %d\n", prime); */
 
 	return prime;
+}
+/********************************************************************************
+ *	Questions to verify changing password
+ *
+ *
+
+********************************************************************************/
+int Questions_to_verify(char *Question,char *Correct_Answer,int counter,char *input)                
+/*input = user ans, correct ans = file_details_x,counter = count*/
+{
+    while (counter !=10)
+    {
+        fflush(stdin);
+    	printf("Question:%s\n",Question);
+        fgets(input,MAX_ENTRY,stdin);  
+        char *pos;                                                  /*pos used to remove the /n character and replace it with*/
+        if ((pos=strchr(input,'\n'))!=NULL)              /*the \0 character so that strcmp will work successfully */
+        *pos ='\0';
+        else 
+        {
+            printf("Password is too long\n");
+            return 1;
+        }
+        /*Conditions underneath determine whether user_ans is valid input*/     
+        if (strcmp (input,Correct_Answer)==0)                    /*This if statement is fulfilled if user_ans is same as */
+                                                                    /*the answer recorded within the user's account*/
+        {	
+        	printf("Correct\n");
+        	counter = 10;
+       	}
+        else if (strcmp (input,"*") == 0)                      /*This if statement is fulfilled if user wishes to exit.*/
+        {
+        	printf("bye\n");
+        	return main();                                      /*Return to main, escape mech, */
+        }
+        else                                                        /*For all incorrect answers, this condition is applied */
+                                                                    /*causing the program to loop. */
+        {
+        	printf("Incorrect\n");
+        	counter = 1;
+        }
+    }
+    counter=0;
+    return 0;
 }
