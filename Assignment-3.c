@@ -1,13 +1,13 @@
 /********************************************************************************
  *	48430 Fundamentals of C Programming - Assignment 3 (Group Project)
- *	File Encryption 
+ *	File Encryption
  *	Names:
  *	Jackie Leong	(Team Leader)
  *	Alan Kocharians
  *	Nick Iacono
  *	Roberto Ferreira
  *	Date: 08/05/2019
- *	
+ *
 ********************************************************************************/
 
 /********************************************************************************
@@ -31,7 +31,7 @@
  *
  *
 ********************************************************************************/
-struct user 
+struct user
 {
 	char* name;
 	char* password;
@@ -72,7 +72,7 @@ int main (void)
 	encrypt(filename);
 	/* CODE */
 	main_menu_select(filename);
-	
+
 	return 0;
 }
 
@@ -151,126 +151,58 @@ void main_menu_select (char* filename)
 	{
 		main_menu();
 		scanf(" %d", &i);
-		
+
 		switch (i)
 		{
-			
+
 		case 1: encrypt(filename);
 				break;
 		case 2: decrypt(filename);
-				break; 
+				break;
 		case 3: search(filename);
 				break;
 		case 4: exit(0);
 				break;
-		default: 
+		default:
 			printf("Invalid choice\n");
 		}
 	}
 }
 
-char* get_message(char* filename)
-{
-	int c;
-	FILE *file;
-	char buffer[1000];
-	char* message;
-	int counter = 0;
-	file = fopen(filename, "r");
-	if (file)
-	{
-		while ((c = getc(file)) != EOF) {
-			buffer[counter] = c;
-			counter++;
-		}
-		fclose(file);
-	}
-	buffer[counter+1] = '\0';
-	message = (char*)malloc(counter * sizeof(char));
-	strcpy(message, buffer);
-	return message;
-}
+
 
 void encrypt(char* filename)
 {
-	char* message = get_message(filename);
-/*	char encrypted_message[sizeof(message)+1];*/ 
-	double p = 3;
-	double q = 7;
-
-	double publicKey1 = p * q;
-
-	int encrypt = 2;
-	double phi = (p-1)*(q-1);
-
-	while (encrypt < phi)
+	printf("\n");
+	fp1 = fopen(filename,"r");
+	if(fp1 == NULL)
 	{
-		if (gcd(encrypt, phi) == 1)	break;
-		else encrypt++;
+			printf("Source File Could Not Be Found\n");
 	}
-
-	int k = 2;
-	double decrypt = (1 + (k*phi))/encrypt;
-
-		char mssg = message[0];
-		double msg = 20;
-		printf("message data = %c", mssg);
-		printf("ascii data = %lf", msg);
-
-		double encrypted = pow(msg, encrypt);
-		encrypted = fmod(encrypted, publicKey1);
-		char encrypted_msg = (char)(encrypted);
-		printf("\nEncypted data = %lf", encrypted);
-		printf("\nEncypted ascii= %c", encrypted_msg);
-
-		double decrypted = pow(encrypted, decrypt);
-		decrypted = fmod(decrypted, publicKey1);
-		char decrypted_message =(char)decrypted;
-		printf("\n DEcrypted data = %f", decrypted);
-		printf("\n DEcrypted ascii = %c", decrypted_message);
-/*
-	int i;
-	for (i=0; i<=sizeof(message)+1; i++)
+	fp2 = fopen("encrypted.txt","w");
+	if(fp2 == NULL)
 	{
-		double msg = (double)message[i];
-		printf("message data = %c", (char)msg);
-
-		double encrypted = pow(msg, encrypt);
-		encrypted = fmod(encrypted, publicKey1);
-		encrypted_message[i] = (char)encrypted+constant;
-		printf("\nEncypted data = %lf", encrypted);
-
-		double decrypted = pow(encrypted, decrypt);
-		decrypted = fmod(decrypted, publicKey1);
-		printf("\n DEcrypted data = %c", (char)decrypted);
+			printf("Target File Could Not Be Found\n");
 	}
-
-	encrypted_message[i+1] = '\0';	
-	save_encryption(filename, encrypted_message);
-*/
-	return;
-}
-
-void save_encryption(char* filename, char* message) 
-{
-	FILE *fp = fopen(filename, "w");
-    if (fp != NULL)
+	while(1)
 	{
-		fputs(message, fp);
-		fclose(fp);
+			ch = fgetc(fp1);
+			if(ch == EOF)
+			{
+					printf("\nEnd Of File\n");
+					break;
+			}
+			else
+			{
+					ch = ch - (8 * 5 - 3);
+					fputc(ch, fp2);
+			}
 	}
-}
-
-int gcd(int a, int b)
-{
-	int temporary;
-	while (b != 0)
-	{
-		temporary = a % b;
-		a = b;
-		b = temporary;
-	}
-	return a;
+	fclose(fp1);
+	fclose(fp2);
+	printf("\n");
+	remove(filename);
+	return 0;
 }
 
 /********************************************************************************
@@ -281,41 +213,35 @@ int gcd(int a, int b)
 
 void decrypt (char* filename)
 {
-	char* message = get_message(filename);
-	char decrypted_message[sizeof(message)+1];
-	double constant = 100;
-	double p = 3;
-	double q = 7;
-
-	double publicKey1 = p * q;
-
-	int encrypt = 2;
-	double phi = (p-1)*(q-1);
-
-	while (encrypt < phi)
+	printf("\n");
+	fp1 = fopen("encrypted.txt","r");
+	if(fp1 == NULL)
 	{
-		if (gcd(encrypt, phi) == 1)	break;
-		else encrypt++;
+			printf("Source File Could Not Be Found\n");
 	}
-
-	int k = 2;
-	double decrypt = (1 + (k*phi))/encrypt;
-		
-	int i;
-	for (i=0; i<=sizeof(message)+1; i++)
+	fp2 = fopen(filename,"w");
+	if(fp2 == NULL)
 	{
-		double msg = (double)(message[i]-constant);
-
-		double decrypted = pow(msg, decrypt);
-		decrypted = fmod(decrypted, publicKey1);
-		
-		printf("asci: %lf", decrypted);
-		decrypted_message[i] = (char)decrypted;
-		printf("\ndecypted data = %c", decrypted_message[i]);
+			printf("Target File Could Not Be Found\n");
 	}
-	decrypted_message[i+1] = '\0';	
-
-	return;
+	while(1)
+	{
+			ch = fgetc(fp1);
+			if(ch == EOF)
+			{
+					printf("\nEnd Of File\n");
+					break;
+			}
+			else
+			{
+					ch = ch + (8 * 5 - 3);
+					fputc(ch, fp2);
+			}
+	}
+	fclose(fp1);
+	fclose(fp2);
+	printf("\n");
+	return 0;
 }
 
 /********************************************************************************
