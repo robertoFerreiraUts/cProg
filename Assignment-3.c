@@ -51,13 +51,10 @@ void create_user(void);
 void change_password(void);
 void reset(void);
 void main_menu(void);
-char* get_message(char* filename);
 void encrypt(char* filename);
-void save_encryption(char* filename, char* message);
 void decrypt(char* filename);
 void search(char* filename);
 void main_menu_select(char* filename);
-int gcd(int a, int b);
 
 FILE *fp1, *fp2;
 char ch;
