@@ -51,11 +51,13 @@ void create_user(void);
 void change_password(void);
 void reset(void);
 void main_menu(void);
+char* get_message(char* filename);
 void encrypt(char* filename);
+void save_encryption(char* filename, char* message);
 void decrypt(char* filename);
 void search(char* filename);
 void main_menu_select(char* filename);
-
+int gcd(int a, int b);
 
 /********************************************************************************
  *	MAIN
@@ -67,6 +69,7 @@ int main (void)
 {
 	char* filename;
 	filename = "hello";
+	encrypt(filename);
 	/* CODE */
 	main_menu_select(filename);
 	
@@ -147,9 +150,10 @@ void main_menu_select (char* filename)
 	while (i != 4)
 	{
 		main_menu();
-		scanf("%d", &i);
+		scanf(" %d", &i);
 		
-		switch (i){
+		switch (i)
+		{
 			
 		case 1: encrypt(filename);
 				break;
@@ -163,12 +167,110 @@ void main_menu_select (char* filename)
 			printf("Invalid choice\n");
 		}
 	}
-
 }
 
-void encrypt (char* filename)
+char* get_message(char* filename)
 {
-	/* CODE */return;
+	int c;
+	FILE *file;
+	char buffer[1000];
+	char* message;
+	int counter = 0;
+	file = fopen(filename, "r");
+	if (file)
+	{
+		while ((c = getc(file)) != EOF) {
+			buffer[counter] = c;
+			counter++;
+		}
+		fclose(file);
+	}
+	buffer[counter+1] = '\0';
+	message = (char*)malloc(counter * sizeof(char));
+	strcpy(message, buffer);
+	return message;
+}
+
+void encrypt(char* filename)
+{
+	char* message = get_message(filename);
+/*	char encrypted_message[sizeof(message)+1];*/ 
+	double p = 3;
+	double q = 7;
+
+	double publicKey1 = p * q;
+
+	int encrypt = 2;
+	double phi = (p-1)*(q-1);
+
+	while (encrypt < phi)
+	{
+		if (gcd(encrypt, phi) == 1)	break;
+		else encrypt++;
+	}
+
+	int k = 2;
+	double decrypt = (1 + (k*phi))/encrypt;
+
+		char mssg = message[0];
+		double msg = 20;
+		printf("message data = %c", mssg);
+		printf("ascii data = %lf", msg);
+
+		double encrypted = pow(msg, encrypt);
+		encrypted = fmod(encrypted, publicKey1);
+		char encrypted_msg = (char)(encrypted);
+		printf("\nEncypted data = %lf", encrypted);
+		printf("\nEncypted ascii= %c", encrypted_msg);
+
+		double decrypted = pow(encrypted, decrypt);
+		decrypted = fmod(decrypted, publicKey1);
+		char decrypted_message =(char)decrypted;
+		printf("\n DEcrypted data = %f", decrypted);
+		printf("\n DEcrypted ascii = %c", decrypted_message);
+/*
+	int i;
+	for (i=0; i<=sizeof(message)+1; i++)
+	{
+		double msg = (double)message[i];
+		printf("message data = %c", (char)msg);
+
+		double encrypted = pow(msg, encrypt);
+		encrypted = fmod(encrypted, publicKey1);
+		encrypted_message[i] = (char)encrypted+constant;
+		printf("\nEncypted data = %lf", encrypted);
+
+		double decrypted = pow(encrypted, decrypt);
+		decrypted = fmod(decrypted, publicKey1);
+		printf("\n DEcrypted data = %c", (char)decrypted);
+	}
+
+	encrypted_message[i+1] = '\0';	
+	save_encryption(filename, encrypted_message);
+*/
+	return;
+}
+
+void save_encryption(char* filename, char* message) 
+{
+	FILE *fp = fopen(filename, "w");
+    if (fp != NULL)
+	{
+		fputs(message, fp);
+		fclose(fp);
+	}
+}
+
+int gcd(int a, int b)
+{
+	int temporary;
+	while (b != 0)
+	{
+		temporary = a % b;
+		a = b;
+		b = temporary;
+	}
+	return a;
 }
 
 /********************************************************************************
@@ -179,7 +281,41 @@ void encrypt (char* filename)
 
 void decrypt (char* filename)
 {
-	/* CODE */return;
+	char* message = get_message(filename);
+	char decrypted_message[sizeof(message)+1];
+	double constant = 100;
+	double p = 3;
+	double q = 7;
+
+	double publicKey1 = p * q;
+
+	int encrypt = 2;
+	double phi = (p-1)*(q-1);
+
+	while (encrypt < phi)
+	{
+		if (gcd(encrypt, phi) == 1)	break;
+		else encrypt++;
+	}
+
+	int k = 2;
+	double decrypt = (1 + (k*phi))/encrypt;
+		
+	int i;
+	for (i=0; i<=sizeof(message)+1; i++)
+	{
+		double msg = (double)(message[i]-constant);
+
+		double decrypted = pow(msg, decrypt);
+		decrypted = fmod(decrypted, publicKey1);
+		
+		printf("asci: %lf", decrypted);
+		decrypted_message[i] = (char)decrypted;
+		printf("\ndecypted data = %c", decrypted_message[i]);
+	}
+	decrypted_message[i+1] = '\0';	
+
+	return;
 }
 
 /********************************************************************************
@@ -190,5 +326,5 @@ void decrypt (char* filename)
 
 void search (char* filename)
 {
-	/* CODE */return;
+	return;
 }
