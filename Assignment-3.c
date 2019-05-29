@@ -59,6 +59,8 @@ void search(char* filename);
 void main_menu_select(char* filename);
 int gcd(int a, int b);
 
+FILE *fp1, *fp2;
+char ch;
 /********************************************************************************
  *	MAIN
  *
@@ -202,7 +204,7 @@ void encrypt(char* filename)
 	fclose(fp2);
 	printf("\n");
 	remove(filename);
-	return 0;
+	return;
 }
 
 /********************************************************************************
@@ -241,7 +243,7 @@ void decrypt (char* filename)
 	fclose(fp1);
 	fclose(fp2);
 	printf("\n");
-	return 0;
+	return;
 }
 
 /********************************************************************************
