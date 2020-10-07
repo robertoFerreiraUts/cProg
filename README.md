@@ -1,1 +1,1 @@
-# cProg
+# C programming RSA Encryption App
